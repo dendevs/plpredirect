@@ -23,6 +23,7 @@ class DBRuleManager
     public function __construct( $table_name )
     {
 	$this->_table_name = $table_name;
+	$this->create_table();
     }
 
     /**
@@ -64,12 +65,25 @@ class DBRuleManager
      */
     public function add_redirection( $origin, $bound_to, $code = '301' )
     {
+	$ok = false;
 	// TODO check url exist
 
-	// add in db
 	global $wpdb;
 
-	$ok = $wpdb->query( $wpdb->prepare( 
+	// already exist
+	$results = $wpdb->get_results( $wpdb->prepare( 
+	    "
+		SELECT origin 
+		FROM $this->_table_name
+		WHERE origin = '%s'
+	    ",
+	    $origin
+	) );
+
+	// add in db
+	if( empty( $results ) )
+	{
+	    $ok = $wpdb->query( $wpdb->prepare( 
 	    "
 		INSERT INTO $this->_table_name
 		( origin, bound_to, code )
@@ -78,7 +92,21 @@ class DBRuleManager
 	    $origin, 
 	    $bound_to, 
 	    $code 
-	) );
+	    ) );
+	}
+	else // update 
+	{
+	    $ok = $wpdb->query( $wpdb->prepare( 
+	    "
+		UPDATE $this->_table_name
+		SET bound_to = '%s', code = '%s'
+		WHERE origin = '%s'
+	    ", 
+	    $bound_to, 
+	    $code ,
+	    $origin 
+	    ) );
+	}
 
 	return ( $ok === false ) ? false : true;
     }
