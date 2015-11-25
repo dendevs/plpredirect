@@ -19,7 +19,6 @@
         "psr-4": {
             "DenDev\\Plpwpredirect\\": "src",
             "DenDev\\Plpwpredirect\\Lib\\": "src/libs/"
-
         }
     }
 }

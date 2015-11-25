@@ -2,7 +2,7 @@
 namespace DenDev\Plpwpredirect;
 use DenDev\Plpwpredirect\RedirectInterface;
 use DenDev\Plpwpredirect\Lib\DBRuleManager;
-
+use DenDev\Plpwpredirect\Lib\AdminScreen;
 
 
 /**
@@ -21,11 +21,35 @@ class Redirect implements RedirectInterface
      *
      * @return void
      */
-    public function __construct( $krl = false )
+    public function __construct( $krl = false, $args = array() )
     {
+	// parent::__construct( $krl, $args );
+	$this->_args = $args;
 	$this->_config = $this->get_default_configs(); // TODO adaptability doit prendre le relais
 	$this->_set_rule_manager();
-	$this->_set_update_manager();
+	if( $this->get_args_value( 'set_update_manager' ) )
+	{
+	    $this->_set_update_manager();
+	}
+    }
+
+    /**
+     * Traite le tableau d'argument donnes a l'object
+     *
+     * @param string $arg_name nom de l'argument dont on veut la valeur 
+     *
+     * @return mixed la valeur ou false
+     */
+    public function get_args_value( $arg_name )
+    {
+	$value = false;
+
+	if( array_key_exists( $arg_name, $this->_args ) )
+	{
+	    $value = $this->_args[$arg_name];
+	}
+
+	return $value;
     }
 
     /**
@@ -118,32 +142,28 @@ class Redirect implements RedirectInterface
      * Permet la creation automatique de redirection si on change le permalien
      * Les choix d'actions dependant de la config update_by_*
      *
-     * @return true;
+     * @return bool false si aucun manager de setter
      */
     private function _set_update_manager()
     {
+	$ok = false;
+
 	if( $this->get_config_value( 'update_by_user' ) )
 	{
-	    echo "create screen";
+	    $admin_screen = new AdminScreen();
+	    $ok = true;
 	}
 
-	if( $this->get_config_value( 'update_by_permalink' ) )
-	{
-	    $rule_manager = $this->_rule_manager;
-	    $redirect = $this;
-	    add_filter( 'wp_insert_post_data', function( $data, $postarr ) use( $rule_manager, $redirect ) {
-		// get old post_name
-		global $post;
-		$old_post_name = $post->post_name;
-		$new_post_name = $data['post_name'];
-		if( $old_post_name != $new_post_name )
-		{
-		    $this->_rule_manager->add_redirection( $old_post_name, $new_post_name );
-		}
+	return $ok;
+    }
 
-		return $data;
-	    }
-	    , '99', 2 );
+    public function execute( $origin )
+    {
+	$infos_redirect = $this->_rule_manager->get_redirection( $origin );
+	if( $infos_redirect )
+	{
+	    wp_redirect( $infos_redirect['bound_to'], $infos_redirect['code'] ); 
+	    exit;
 	}
     }
 }

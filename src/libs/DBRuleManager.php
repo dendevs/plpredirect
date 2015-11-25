@@ -133,13 +133,15 @@ class DBRuleManager
 	    $origin
 	) );
 
-	if( ( bool ) $results ) // better perfs than is_empty
+	if( ! empty( $results ) )
 	{
 	    $code = $results[0]->code;
 	    $bound_to = $results[0]->bound_to;
 
 	    $ok = array();
-	    $ok[$code] = $bound_to;
+	    $ok['origin'] = $origin;
+	    $ok['bound_to'] = $bound_to;
+	    $ok['code'] = $code;
 	}
 
 	return $ok;

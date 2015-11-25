@@ -21,7 +21,7 @@ class DBRuleManagerTest extends \WP_UnitTestCase
 	{
 		$object = new DBRuleManager( 'test_table_redirect' );
 		$this->assertTrue( $object->add_redirection( 'origin.com', 'redirect.be' ) );
-		$this->assertArrayHasKey( '301', $object->get_redirection( 'origin.com' ) );
+		$this->assertArrayHasKey( 'code', $object->get_redirection( 'origin.com' ) );
 		$this->assertContains( 'redirect.be', $object->get_redirection( 'origin.com' ) );
 
 		// update

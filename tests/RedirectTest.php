@@ -10,4 +10,12 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 		$object = new Redirect();
 		$this->assertInstanceOf( 'DenDev\Plpwpredirect\Redirect', $object );
 	}
+
+	/*
+	public function test_set_update_manager()
+	{
+		$object = new Redirect();
+		$this->assertTrue( $object->set_update_manager() );
+	}
+	 */
 }
