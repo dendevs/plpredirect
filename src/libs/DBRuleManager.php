@@ -46,10 +46,10 @@ class DBRuleManager
 	    UNIQUE KEY id (id)
 	) $charset_collate;";
 
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-	$tmp = dbDelta( $sql );
+require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+$tmp = dbDelta( $sql );
 
-	return ( array_key_exists( $this->_table_name, $tmp ) ) ? true : false;
+return ( array_key_exists( $this->_table_name, $tmp ) ) ? true : false;
     }
 
     /**
@@ -67,31 +67,29 @@ class DBRuleManager
     {
 	$ok = false;
 	// TODO check url exist
+	if( $this->_check_args_add_redirection( $origin, $bound_to, $code ) )
+	{
 
-	global $wpdb;
+	    global $wpdb;
 
-	// already exist
-	$results = $wpdb->get_results( $wpdb->prepare( 
-	    "
+	    // already exist
+	    $results = $wpdb->get_results( $wpdb->prepare( "
 		SELECT origin 
 		FROM $this->_table_name
-		WHERE origin = '%s'
-	    ",
-	    $origin
-	) );
+		WHERE origin = '%s'",
+		$origin
+	    ) );
 
-	// add in db
-	if( empty( $results ) )
-	{
-	    $ok = $wpdb->query( $wpdb->prepare( 
-	    "
+	    // add in db
+	    if( empty( $results ) )
+	    {
+		$ok = $wpdb->query( $wpdb->prepare( "
 		INSERT INTO $this->_table_name
 		( origin, bound_to, code )
-		VALUES ( %s, %s, %s )
-	    ", 
-	    $origin, 
-	    $bound_to, 
-	    $code 
+		VALUES ( %s, %s, %s )", 
+		$origin, 
+		$bound_to, 
+		$code 
 	    ) );
 	}
 	else // update 
@@ -107,9 +105,52 @@ class DBRuleManager
 	    $origin 
 	    ) );
 	}
+	}
 
 	return ( $ok === false ) ? false : true;
     }
+
+    /**
+     * Supprime n regles de redirection
+     *
+     * @param array $ids_rule tableau des ids a deleter
+     *
+     * @return bool false si echec
+     */
+    public function delete_redirections( $ids_rule )
+    {
+	$ok = true;
+
+	foreach( $ids_rule as $id_rule )
+	{
+	    $tmp = $this->delete_redirection( $id_rule ); 
+	    if( $tmp == false )
+	    {
+		$ok = $tmp;
+	    }
+	}
+
+	return $ok;
+    }
+
+    /**
+     * Supprime une regle de redirection
+     *
+     * Ajoute la regle en db 
+     *
+     * @param string $id_rule id de la regle a supprimer
+     *
+     * @return bool false si echec
+     */
+    public function delete_redirection( $id_rule )
+    {
+	$ok = false;
+	global $wpdb;
+	$ok = $wpdb->delete( $this->_table_name, array( 'id' => $id_rule ) );
+
+	return ( $ok === false ) ? false : true;
+    }
+
 
     /**
      * Donne l'url de redirection d'une url d'origin
@@ -129,9 +170,9 @@ class DBRuleManager
 		FROM $this->_table_name 
 		WHERE origin = '%s'
 		ORDER BY date DESC
-	    ",
-	    $origin
-	) );
+",
+	$origin
+    ) );
 
 	if( ! empty( $results ) )
 	{
@@ -142,6 +183,39 @@ class DBRuleManager
 	    $ok['origin'] = $origin;
 	    $ok['bound_to'] = $bound_to;
 	    $ok['code'] = $code;
+	}
+
+	return $ok;
+    }
+
+    /**
+     * Donne toute les regles present en db
+     *
+     * @return array toute les regles 
+     */
+    public function get_redirections()
+    {
+	global $wpdb;
+	$ok = false;
+
+	$results = $wpdb->get_results( $wpdb->prepare(
+	    "SELECT * " .
+	    "FROM $this->_table_name " .
+	    "ORDER BY date DESC",
+	    $origin
+	) );
+
+	return $results;
+    }
+
+    // - 
+    private function _check_args_add_redirection( $origin, $bound_to, $code )
+    {
+	$ok = true;
+
+	if( ! $origin || ! $bound_to || ( $code != 301 && $code != 302 ) )
+	{
+	    $ok = false;
 	}
 
 	return $ok;

@@ -17,6 +17,23 @@ class DBRuleManagerTest extends \WP_UnitTestCase
 		$this->assertTrue( $object->add_redirection( 'uiouoi.com', 'jkljkl.be' ) );
 	}
 
+	public function test_delete_redirection()
+	{
+		$object = new DBRuleManager( 'test_table_redirect' );
+		$this->assertTrue( $object->add_redirection( 'uiouoi.com', 'jkljkl.be' ) );
+		$this->assertTrue( $object->delete_redirection( 1 ) );
+	}
+
+public function test_delete_redirections()
+	{
+		$object = new DBRuleManager( 'test_table_redirect' );
+		$this->assertTrue( $object->add_redirection( 'un.com', 'vers_un.be' ) );
+		$this->assertTrue( $object->add_redirection( 'deux.com', 'vers_deux.be' ) );
+		$this->assertTrue( $object->add_redirection( 'trois.com', 'vers_trois.be' ) );
+		$this->assertTrue( $object->delete_redirections( array( 1, 2, 3 ) ) );
+	}
+
+
 	public function test_redirection_to()
 	{
 		$object = new DBRuleManager( 'test_table_redirect' );
