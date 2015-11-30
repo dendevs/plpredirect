@@ -1,9 +1,30 @@
 # Plpwpredirect
 
 [![Build Status](https://travis-ci.org/dendevs/plpwpredirect.svg)](https://travis-ci.org/dendevs/plpwpredirect)
-[![Coverage Status](https://coveralls.io/repos/dendevs/plpwpredirect/badge.svg?branch=master&service=github)](https://coveralls.io/github/dendevs/plpwpredirect?branch=master)
+[![Coverage Status](https://coveralls.io/repos/dendevs/plpredirect/badge.svg?branch=master&service=github)](https://coveralls.io/github/dendevs/plpredirect?branch=master)
 
 *Simple redirect in wp*
+
+## Install
+
+```bash
+composer require dendev/plpwpredirect
+#   "minimum-stability": "dev",
+```
+
+```php
+<?php
+require 'vendor/autoload.php';
+use DenDev\Plpwpredirect\Redirect;
+
+$root_path = plugin_dir_path( __FILE__ );
+$root_url = plugins_url() . '/package/';
+$redirect = Redirect::get_instance( array(
+	'root_path' => $root_path,
+	'root_url' => $root_url,
+	'set_update_manager' => true ) 
+);
+```
 
 ## Refs:
 
