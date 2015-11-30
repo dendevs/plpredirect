@@ -5,6 +5,11 @@ use DenDev\Plpwpredirect\Lib\DBRuleManager;
 
 class DBRuleManagerTest extends \WP_UnitTestCase
 {
+	public function setUp()
+	{
+		parent::setUp();
+	}
+
 	public function test_instanciate()
 	{
 		$object = new DBRuleManager( 'test_table_redirect' );
@@ -24,7 +29,7 @@ class DBRuleManagerTest extends \WP_UnitTestCase
 		$this->assertTrue( $object->delete_redirection( 1 ) );
 	}
 
-public function test_delete_redirections()
+	public function test_delete_redirections()
 	{
 		$object = new DBRuleManager( 'test_table_redirect' );
 		$this->assertTrue( $object->add_redirection( 'un.com', 'vers_un.be' ) );
@@ -32,7 +37,6 @@ public function test_delete_redirections()
 		$this->assertTrue( $object->add_redirection( 'trois.com', 'vers_trois.be' ) );
 		$this->assertTrue( $object->delete_redirections( array( 1, 2, 3 ) ) );
 	}
-
 
 	public function test_redirection_to()
 	{
@@ -44,6 +48,11 @@ public function test_delete_redirections()
 		// update
 		$this->assertTrue( $object->add_redirection( 'origin.com', 'redirect_surchage.be' ) );
 		$this->assertContains( 'redirect_surchage.be', $object->get_redirection( 'origin.com' ) );
+	}
+
+	public function tearDown()
+	{
+		parent::tearDown();
 	}
 
 }

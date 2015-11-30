@@ -22,7 +22,8 @@ class AdminHandler // FIXME ne signifie rien PostHandler ou AdminPostHandler ici
 	$back_url = ( array_key_exists( 'back_url', $_REQUEST ) ) ? $_REQUEST['back_url'] : false;
 	$origin = ( array_key_exists( 'origin', $_REQUEST ) ) ? $_REQUEST['origin'] : false;
 	$bound_to = ( array_key_exists( 'bound_to', $_REQUEST ) ) ? $_REQUEST['bound_to'] : false;
-	$code = ( array_key_exists( 'code', $_REQUEST ) ) ? $_REQUEST['code'] : false;
+	$code = ( array_key_exists( 'code', $_REQUEST ) ) ? $_REQUEST['code'] : 301;
+	$code = ( $code == 301 || $code == 302 ) ? $code : 301;
 
 	$ok = $this->_redirect->add_redirection( $origin, $bound_to, $code );
 	if( $ok )
@@ -33,7 +34,6 @@ class AdminHandler // FIXME ne signifie rien PostHandler ou AdminPostHandler ici
 	{
 	    $status_header = '400';
 	}
-
 
 	wp_safe_redirect( add_query_arg( 'status', $status_header, $back_url ) );
 	exit;

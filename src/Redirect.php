@@ -18,7 +18,7 @@ class Redirect implements RedirectInterface
     private $_rule_manager;
 
 
-    static function get_instance( $args )
+    static function get_instance( $args = array() )
     {
 	if (null === static::$_instance) 
 	{
@@ -207,7 +207,7 @@ class Redirect implements RedirectInterface
 
 	if( $this->get_config_value( 'update_by_user' ) )
 	{
-	    $datas['rules'] = $this->_rule_manager->get_redirections();
+	    $datas['rules'] = $this->_rule_manager->get_redirections( true );
 
 	    $admin_screen = new AdminScreen(  // devrait etre dans un fichier de configa! // PAS BIEN this devrait fournir la config general et la methode pour y acceder, ok en args deux un array de config pour la classe ==> CONFUS !!
 		array( 'page_title' => 'Redirect',
@@ -230,13 +230,31 @@ class Redirect implements RedirectInterface
 	return $ok;
     }
 
-    public function execute( $origin )
+    /**
+     * Effectue la redirection si celle ci existe
+     *
+     * @param string $origin url de base
+     * @param bool $redirect effectue ou non une redirection
+     *
+     * @return void
+     */
+    public function execute( $origin = false, $redirect = true )
     {
+	if( ! $origin )
+	{
+	    if( array_key_exists( 'REQUEST_URI', $_SERVER ) )
+	    {
+		$origin = $_SERVER['REQUEST_URI'];
+	    }
+	}
+
 	$infos_redirect = $this->_rule_manager->get_redirection( $origin );
-	if( $infos_redirect )
+	if( $infos_redirect && $redirect )
 	{
 	    wp_redirect( $infos_redirect['bound_to'], $infos_redirect['code'] ); 
 	    exit;
 	}
+
+	return $infos_redirect;
     }
 }

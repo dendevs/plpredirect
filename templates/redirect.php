@@ -19,8 +19,8 @@
 
 <?php foreach( $datas['rules'] as $rule ): ?>
   <tr>
-	  <td><?php echo $rule->origin; ?></td>
-	  <td><?php echo $rule->bound_to; ?></td> 
+	  <td><a href="<?php echo site_url( $rule->origin );?>" target='_blank'><?php echo $rule->origin; ?></a></td>
+	  <td><a href="<?php echo site_url( $rule->bound_to );?>" target='_blank'><?php echo $rule->bound_to; ?></a></td>
 	  <td><?php echo $rule->code;?></td>
 	  <td><input type="checkbox" name="rules_to_delete[]" value="<?php echo $rule->id;?>" class='submit_to_delete'></td>
   </tr>

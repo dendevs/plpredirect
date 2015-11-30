@@ -23,11 +23,23 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf( 'DenDev\Plpwpredirect\Redirect', $object );
 	}
 
-	/*
-	public function test_set_update_manager()
+	public function test_add_redirection()
 	{
-		$object = new Redirect();
-		$this->assertTrue( $object->set_update_manager() );
+		$object = Redirect::get_instance( array( 
+			'root_path' => $this->_root_path,
+			'root_url' => $this->_root_url,
+		) );
+		$this->assertTrue( $object->add_redirection( 'origin.com', 'bound_to.be' ) );
 	}
-	 */
+
+	public function test_execute()
+	{
+		$object = Redirect::get_instance( array( 
+			'root_path' => $this->_root_path,
+			'root_url' => $this->_root_url,
+		) );
+
+		$this->assertTrue( $object->add_redirection( 'origin.com', 'bound_to.be' ) );
+		$this->assertContains( 'bound_to.be', $object->execute( 'origin.com', false ) );
+	}
 }
