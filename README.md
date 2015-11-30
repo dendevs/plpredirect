@@ -1,16 +1,20 @@
 # Plpwpredirect
 
-[![Build Status](https://travis-ci.org/dendevs/plpwpredirect.svg)](https://travis-ci.org/dendevs/plpwpredirect)
+[![Build Status](https://travis-ci.org/dendevs/plpredirect.svg?branch=master)](https://travis-ci.org/dendevs/plpredirect)
 [![Coverage Status](https://coveralls.io/repos/dendevs/plpredirect/badge.svg?branch=master&service=github)](https://coveralls.io/github/dendevs/plpredirect?branch=master)
 
 *Simple redirect in wp*
 
 ## Install
 
+Pour composer
+
 ```bash
 composer require dendev/plpwpredirect
 #   "minimum-stability": "dev",
 ```
+
+Dans le code
 
 ```php
 <?php
