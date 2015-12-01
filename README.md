@@ -30,6 +30,10 @@ $redirect = Redirect::get_instance( array(
 );
 ```
 
+## Docs
+
+[PhpDoc](http://dendevs.github.io/plpredirect/docs/namespaces/default.html "php doc")
+
 ## Refs:
 
 [wp create table](https://codex.wordpress.org/Creating_Tables_with_Plugins)
