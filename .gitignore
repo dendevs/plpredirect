@@ -3,5 +3,5 @@ clover.xml
 /vendor/
 composer.lock
 /logs/
-/docs/
-/metrics/
+/docs/phpdoc/
+/docs/metrics/
