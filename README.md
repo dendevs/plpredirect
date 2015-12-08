@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/dendevs/plpredirect.svg?branch=master)](https://travis-ci.org/dendevs/plpredirect)
 [![Coverage Status](https://coveralls.io/repos/dendevs/plpredirect/badge.svg?branch=master&service=github)](https://coveralls.io/github/dendevs/plpredirect?branch=master)
+[![Documentation Status](https://readthedocs.org/projects/plpredirect/badge/?version=latest)](http://plpredirect.readthedocs.org/en/latest/?badge=latest)
+
 
 *Simple redirect in wp*
 
