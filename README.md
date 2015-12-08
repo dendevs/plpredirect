@@ -28,7 +28,9 @@ $root_url = plugins_url() . '/package/';
 $redirect = Redirect::get_instance( array(
 	'root_path' => $root_path,
 	'root_url' => $root_url,
-	'set_update_manager' => true ) 
+	'set_update_manager' => true,
+	// 'parent_menu' => 'dwpack_menu'
+	) 
 );
 ```
 
