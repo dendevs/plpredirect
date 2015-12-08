@@ -3,7 +3,6 @@
     "description": "wpredirect for pulpy project",
     "type": "libs",
     "require": {
-        "dendev/plpadaptability": "dev-master"
     },
     "require-dev": {
         "satooshi/php-coveralls": "dev-master"

@@ -13,8 +13,8 @@ class AdminHandler // FIXME ne signifie rien PostHandler ou AdminPostHandler ici
     {
 	$this->_redirect = $redirect;
 
-	add_action( 'admin_post_add_rule', array( $this, 'submit_add_rule_callback' ) );
-	add_action( 'admin_post_delete_rule', array( $this, 'submit_delete_rule_callback' ) );
+	add_action( 'admin_post_add_rule', array( $this, 'submit_add_rule_callback' ), 99 );
+	add_action( 'admin_post_delete_rule', array( $this, 'submit_delete_rule_callback' ), 99 );
     }
 
     public function submit_add_rule_callback()

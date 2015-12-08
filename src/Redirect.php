@@ -18,6 +18,12 @@ class Redirect implements RedirectInterface
     private $_rule_manager;
 
 
+    /**
+     * Implemente le pattern Singleton
+     *
+     *
+     * @return void
+     */
     static function get_instance( $args = array() )
     {
 	if (null === static::$_instance) 
@@ -29,7 +35,7 @@ class Redirect implements RedirectInterface
     }
 
     /**
-     * Set le kernel du servie // ici il est le kernel 
+     * Set le kernel du servie // ici il est le kernel.
      *
      * @param object $krl la ref du kernel auquel appartient le service ou false par defaut.
      *
@@ -52,11 +58,11 @@ class Redirect implements RedirectInterface
     }
 
     /**
-     * Ajoute une regle de redirection
+     * Ajoute une regle de redirection.
      * 
-     * Sous traite au rule manager
+     * Sous traite au rule manager.
      * 
-     * @return bool true si la rule a etait ajouter
+     * @return bool true si la rule a etait ajouter.
      */
     public function add_redirection( $origin, $bound_to, $code = '301' )
     {
@@ -64,13 +70,13 @@ class Redirect implements RedirectInterface
     }
 
    /**
-     * Supprime n regles de redirection
+     * Supprime n regles de redirection.
      * 
-     * Sous traite au rule manager
+     * Sous traite au rule manager.
      *
-     * @param array $ids_rule array des id a delete
+     * @param array $ids_rule array des id a delete.
      * 
-     * @return bool true si la rule a etait ajouter
+     * @return bool true si la rule a etait ajouter.
      */
     public function delete_redirections( $ids_rule )
     {
@@ -78,11 +84,11 @@ class Redirect implements RedirectInterface
     }
 
     /**
-     * Traite le tableau d'argument donnes a l'object
+     * Traite le tableau d'argument donnes a l'object.
      *
-     * @param string $arg_name nom de l'argument dont on veut la valeur 
+     * @param string $arg_name nom de l'argument dont on veut la valeur.
      *
-     * @return mixed la valeur ou false
+     * @return mixed la valeur ou false.
      */
     public function get_args_value( $arg_name )
     {
@@ -97,9 +103,9 @@ class Redirect implements RedirectInterface
     }
 
     /**
-     * Configuration par defaut du service
+     * Configuration par defaut du service.
      *
-     * @var string $storage db,file,htacess 
+     * @var string $storage db,file,htacess.
      *
      * @return array tableau associatif option value.
      */
@@ -107,6 +113,7 @@ class Redirect implements RedirectInterface
     {
 	$root_path  = $this->_args['root_path'];
 	$root_url = $this->_args['root_url'];
+	$parent_menu = ( array_key_exists( 'parent_menu', $this->_args ) ) ? $this->_args['parent_menu'] : false; // FIXME bof la config demander par l'user devrait etre setter ailleurs
 
 	$module_root_path = dirname( plugin_dir_path( __FILE__ ) ) . '/';
 	$module_root_url = dirname( dirname( plugins_url( 'Redirect.php', __FILE__ ) ) ) . '/';
@@ -116,7 +123,7 @@ class Redirect implements RedirectInterface
 	    'root_url' => $root_url,
 	    'module_root_url' => $module_root_url,
 	    'module_root_path' => $module_root_path,
-	    'img_url' => $root_url . 'img/',
+	    'img_url' => $module_root_url . 'assets/img/',
 	    'js_url' => $module_root_url . 'assets/js/',
 	    'template_path' => $module_root_path. 'templates/',
 	    'storage' => 'db',
@@ -125,8 +132,9 @@ class Redirect implements RedirectInterface
 	    'file_path' => '',
 	    'update_by_user' => true,
 	    'update_by_code' => true,
-	    'update_by_permalink' => true,
-	    'text_domain' => 'redirect' // FIXME chaque module a son text domain ?
+	    'update_by_permalink' => true, // @deprecated 
+	    'parent_menu' => $parent_menu,
+	    'text_domain' => 'redirect' // FIXME chaque module a son text domain ? // oui car chaqu'un est autonome
 	);
     }
 
@@ -195,9 +203,9 @@ class Redirect implements RedirectInterface
     /**
      * Ajout la mise a jour pour le code ou l'user
      *
-     * Permet a l'utilisateur de cree ses redirction via une interface
-     * Permet la creation automatique de redirection si on change le permalien
-     * Les choix d'actions dependant de la config update_by_*
+     * Ajoute une interface admin pour l'ajout de regles de redirection par l'utilisateur.
+     * Par default un nouveau menu Redirect est cree en position 6 avec les restrictions manage_options.
+     * Si l'option in_menu existe alors l'interface vient se mettre dans le menu donné
      *
      * @return bool false si aucun manager de setter
      */
@@ -220,7 +228,8 @@ class Redirect implements RedirectInterface
 		'js_url' => $this->_config['js_url'], // stupide, devrait etre fournit par une methode qui gere la config general. faut un jeux de composant parent qui se charge des taches de routine et de la coherence et la non redondance
 		'icon_name' => 'button_html.png',
 		'position' => '6',
-		'datas' => $datas
+		'datas' => $datas,
+		'parent_menu' => $this->_config['parent_menu']
 	    ) );
 
 	    $admin_handler = new AdminHandler( $this ); // BIEN

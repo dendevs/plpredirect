@@ -18,8 +18,8 @@ class AdminScreen
     public function __construct( $args )
     {
 	$this->_args = $args;
-	add_action( 'admin_menu', array( $this, 'redirect_admin_menu_callback' ) );
-	add_action( 'admin_enqueue_scripts', array( $this, 'add_scripts_callback' ) );
+	add_action( 'admin_menu', array( $this, 'redirect_admin_menu_callback' ), 99 );
+	add_action( 'admin_enqueue_scripts', array( $this, 'add_scripts_callback' ), 99 );
     }
 
     public function add_scripts_callback() // empeche la centralisation...
@@ -65,6 +65,7 @@ class AdminScreen
      */
     public function redirect_admin_menu_callback()
     {
+	$parent_menu = $this->get_args_value( 'parent_menu' );
 	$page_title = $this->get_args_value( 'page_title' );
 	$menu_title = $this->get_args_value( 'menu_title' );
 	$capability = $this->get_args_value( 'capability' );
@@ -73,7 +74,14 @@ class AdminScreen
 	$icon_url = $this->get_args_value( 'img_url' ) . $this->get_args_value( 'icon_name' );
 	$position = $this->get_args_value( 'position' );
 
-	add_menu_page( $page_title, $menu_title, $capability, $menu_slug, array( $this, 'render_page_redirect' ), $icon_url, $position ); 
+	if( $parent_menu )
+	{
+	    add_submenu_page( $parent_menu, $page_title, $menu_title, $capability, $menu_slug, array( $this, 'render_page_redirect' ) ); 
+	}
+	else
+	{
+	    add_menu_page( $page_title, $menu_title, $capability, $menu_slug, array( $this, 'render_page_redirect' ), $icon_url, $position ); 
+	}
     }
 
     /**

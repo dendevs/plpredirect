@@ -12,8 +12,8 @@ class AdminNotice
     {
 	$this->_redirect = $redirect; // au niveau du concept on est avec kernel ( redirect n'est qu'un substitut )
 	$this->_args = $args;
-	add_action( 'admin_notices', array( $this, 'admin_notice_error_callback' ) ); 
-	add_action( 'admin_notices', array( $this, 'admin_notice_succes_callback' ) ); 
+	add_action( 'admin_notices', array( $this, 'admin_notice_error_callback' ), 99 ); 
+	add_action( 'admin_notices', array( $this, 'admin_notice_succes_callback' ), 99 ); 
     }
 
   /**
