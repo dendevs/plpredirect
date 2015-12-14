@@ -201,8 +201,7 @@ return ( array_key_exists( $this->_table_name, $tmp ) ) ? true : false;
 	$results = $wpdb->get_results( $wpdb->prepare(
 	    "SELECT * " .
 	    "FROM $this->_table_name " .
-	    "ORDER BY date DESC",
-	    $origin
+	    "ORDER BY date DESC"
 	) );
 
 	return $results;
