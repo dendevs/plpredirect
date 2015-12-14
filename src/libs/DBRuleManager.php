@@ -198,11 +198,11 @@ return ( array_key_exists( $this->_table_name, $tmp ) ) ? true : false;
 	global $wpdb;
 	$ok = false;
 
-	$results = $wpdb->get_results( $wpdb->prepare(
+	$results = $wpdb->get_results(
 	    "SELECT * " .
 	    "FROM $this->_table_name " .
 	    "ORDER BY date DESC"
-	) );
+	);
 
 	return $results;
     }
